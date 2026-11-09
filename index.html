@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1020" id="metaTheme">
+  <title>Inicio | MYA — Manage Your Activities</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Aplica el tema guardado antes de pintar para evitar el parpadeo */
+    try {
+      const s = JSON.parse(localStorage.getItem("mya-app-v2") || "{}").settings || {};
+      const dark = s.theme === "light" ? false : s.theme === "system" ? matchMedia("(prefers-color-scheme: dark)").matches : true;
+      document.documentElement.dataset.theme = dark ? "dark" : "light";
+    } catch (e) {}
+  </script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Iconos (estilo línea). Se usan con <i data-i="nombre"></i> o con ic("nombre") en JS -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+      <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+      <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+      <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5M7 9l5-5 5 5M5 20h14"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+      <symbol id="i-board" viewBox="0 0 24 24"><rect x="3.5" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="16.5" y="4" width="4" height="13" rx="1.5"/></symbol>
+      <symbol id="i-timeline" viewBox="0 0 24 24"><path d="M4 6h9M8 12h12M6 18h8"/></symbol>
+      <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+      <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5 5h14l2 8v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6z"/></symbol>
+      <symbol id="i-command" viewBox="0 0 24 24"><path d="M9 9V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z"/></symbol>
+      <symbol id="i-subtask" viewBox="0 0 24 24"><path d="M5 4v10a3 3 0 0 0 3 3h4"/><rect x="13" y="14" width="7" height="6" rx="1.5"/><rect x="4" y="3" width="4" height="3" rx="1"/></symbol>
+      <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14a5 5 0 0 1 4.5 5"/></symbol>
+      <symbol id="i-library" viewBox="0 0 24 24"><path d="M4 4v16M9 4v16"/><path d="m14 5.5 4-1 3 14.5-4 1z"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+      <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="scrim" data-action="sidebar:close"></div>
+
+  <!-- ============ BARRA LATERAL ============ -->
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#Inicio" data-action="nav" data-page="Inicio" aria-label="MYA, ir a Inicio">
+      <span class="brand-mark">M</span>
+      <span class="brand-copy"><strong>MYA</strong><small>Manage Your Activities</small></span>
+    </a>
+
+    <p class="nav-label">Espacio de trabajo</p>
+    <nav class="nav" aria-label="Navegación principal">
+      <button class="nav-item" data-action="nav" data-page="Inicio"><i data-i="home"></i><span>Inicio</span></button>
+      <button class="nav-item" data-action="nav" data-page="Chat"><i data-i="chat"></i><span>Chat</span><b class="nav-badge" id="unreadBadge" hidden>0</b></button>
+      <button class="nav-item" data-action="nav" data-page="Proyectos"><i data-i="folder"></i><span>Proyectos</span></button>
+      <button class="nav-item" data-action="nav" data-page="Tareas"><i data-i="check-circle"></i><span>Tareas</span><b class="nav-badge is-late" id="lateBadge" hidden>0</b></button>
+      <button class="nav-item" data-action="nav" data-page="Rutinas"><i data-i="repeat"></i><span>Rutinas</span><b class="nav-badge" id="routineBadge" hidden>0</b></button>
+      <button class="nav-item" data-action="nav" data-page="Equipo"><i data-i="users"></i><span>Equipo</span></button>
+      <button class="nav-item" data-action="nav" data-page="Catálogo"><i data-i="library"></i><span>Catálogo</span></button>
+      <button class="nav-item" data-action="nav" data-page="Calendario"><i data-i="calendar"></i><span>Calendario</span></button>
+      <button class="nav-item" data-action="nav" data-page="Archivos"><i data-i="file"></i><span>Archivos</span></button>
+      <button class="nav-item" data-action="nav" data-page="Reportes"><i data-i="chart"></i><span>Reportes</span></button>
+    </nav>
+
+    <p class="nav-label">Preferencias</p>
+    <nav class="nav" aria-label="Preferencias">
+      <button class="nav-item" data-action="nav" data-page="Configuración"><i data-i="sliders"></i><span>Configuración</span></button>
+    </nav>
+
+    <div class="sidebar-user">
+      <span class="avatar" id="userAvatar">MM</span>
+      <div class="who"><strong class="user-name">Manuel M.</strong><span class="user-role">Gerente de Logística</span></div>
+      <button class="icon-btn" data-action="auth:logout" aria-label="Cerrar sesión" title="Cerrar sesión"><i data-i="logout"></i></button>
+    </div>
+  </aside>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" data-action="sidebar:toggle" aria-label="Abrir menú"><i data-i="menu"></i></button>
+      <button class="search-trigger" data-action="palette:open" aria-label="Buscar o ejecutar un comando">
+        <i data-i="search"></i><span>Buscar tareas, proyectos o comandos</span><kbd>Ctrl K</kbd>
+      </button>
+      <div class="topbar-actions">
+        <button class="sync-pill" id="syncPill" data-action="sync:now" hidden aria-live="polite"><span class="sync-dot"></span><span id="syncText">Sincronizado</span></button>
+        <span class="today-label" id="todayDate"></span>
+        <button class="icon-btn" data-action="theme:quick" id="themeQuick" aria-label="Cambiar tema"><i data-i="moon"></i></button>
+        <button class="btn btn-primary" data-action="task:new"><i data-i="plus"></i><span>Nueva tarea</span></button>
+      </div>
+    </header>
+
+    <div class="workspace">
+
+      <!-- ============ INICIO ============ -->
+      <section class="page" id="page-Inicio">
+        <div class="page-head">
+          <div>
+            <h1 id="greeting"></h1>
+            <p id="greetingSub"></p>
+          </div>
+          <div class="head-actions">
+            <button class="btn btn-secondary" data-action="nav" data-page="Reportes"><i data-i="chart"></i><span>Ver reportes</span></button>
+          </div>
+        </div>
+
+        <div class="stats" id="statsGrid"></div>
+
+        <div class="dash-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Mi día</h2><p id="focusSub">Lo más urgente primero</p></div>
+              <button class="btn btn-ghost btn-sm" data-action="nav" data-page="Tareas"><span>Ver todas</span></button>
+            </div>
+            <div class="focus-list" id="focusList"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Avance general</h2><p>Estado de todas las tareas</p></div></div>
+            <div class="donut-block">
+              <div id="progressDonut"></div>
+              <div class="legend" id="progressLegend"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="section-head">
+          <div><h2>Tablero</h2><p>Arrastra una tarea para cambiar su estado.</p></div>
+          <label class="select-wrap"><span class="sr-only">Proyecto</span><select id="boardProject" data-change="dash:project"></select></label>
+        </div>
+        <div class="kanban" id="dashboardBoard"></div>
+
+        <div class="bottom-grid">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Completadas esta semana</h2><p id="weekTotal"></p></div></div>
+            <div class="week-chart" id="weekChart"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Actividad reciente</h2><p>Últimos movimientos en MYA</p></div></div>
+            <div class="activity" id="recentActivity"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ============ PROYECTOS ============ -->
+      <section class="page hidden" id="page-Proyectos">
+        <div class="page-head">
+          <div><h1>Proyectos</h1><p>Organiza iniciativas y da seguimiento a su avance.</p></div>
+          <button class="btn btn-primary" data-action="project:new"><i data-i="plus"></i><span>Nuevo proyecto</span></button>
+        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
+      </section>
+
+      <!-- ============ TAREAS ============ -->
+      <section class="page hidden" id="page-Tareas">
+        <div class="page-head">
+          <div><h1>Tareas</h1><p>Prioridades, responsables y fechas de entrega en un solo lugar.</p></div>
+          <button class="btn btn-primary" data-action="task:new"><i data-i="plus"></i><span>Nueva tarea</span></button>
+        </div>
+
+        <div class="toolbar">
+          <label class="field-search"><i data-i="search"></i><input id="taskSearch" type="search" placeholder="Buscar por nombre, etiqueta o proyecto" autocomplete="off"></label>
+          <select id="fStatus" aria-label="Estado"></select>
+          <select id="fPriority" aria-label="Prioridad"></select>
+          <select id="fProject" aria-label="Proyecto"></select>
+          <select id="fAssignee" aria-label="Responsable"></select>
+          <select id="fDept" aria-label="Departamento"></select>
+          <select id="fSort" aria-label="Ordenar por">
+            <option value="due">Ordenar: fecha</option>
+            <option value="priority">Ordenar: prioridad</option>
+            <option value="name">Ordenar: nombre</option>
+            <option value="recent">Ordenar: más recientes</option>
+          </select>
+          <div class="seg" id="taskViewSeg" role="tablist" aria-label="Vista">
+            <button role="tab" data-action="view:set" data-view="list"><i data-i="list"></i><span>Lista</span></button>
+            <button role="tab" data-action="view:set" data-view="board"><i data-i="board"></i><span>Tablero</span></button>
+            <button role="tab" data-action="view:set" data-view="timeline"><i data-i="timeline"></i><span>Cronograma</span></button>
+          </div>
+        </div>
+        <div class="active-filters" id="activeFilters"></div>
+
+        <div id="taskListView"></div>
+        <div id="taskBoardView" class="kanban hidden"></div>
+        <div id="taskTimelineView" class="hidden"></div>
+      </section>
+
+      <!-- ============ CALENDARIO ============ -->
+      <section class="page hidden" id="page-Calendario">
+        <div class="page-head">
+          <div><h1>Calendario</h1><p>Arrastra una tarea a otro día para reprogramarla.</p></div>
+          <button class="btn btn-primary" data-action="task:new"><i data-i="plus"></i><span>Nueva tarea</span></button>
+        </div>
+        <div class="panel calendar-panel">
+          <div class="cal-toolbar">
+            <h2 id="calTitle"></h2>
+            <div class="cal-nav">
+              <button class="icon-btn" data-action="cal:prev" aria-label="Mes anterior"><i data-i="chev-l"></i></button>
+              <button class="btn btn-secondary btn-sm" data-action="cal:today">Hoy</button>
+              <button class="icon-btn" data-action="cal:next" aria-label="Mes siguiente"><i data-i="chev-r"></i></button>
+            </div>
+          </div>
+          <div class="calendar" id="calendarGrid"></div>
+        </div>
+      </section>
+
+      <!-- ============ RUTINAS ============ -->
+      <section class="page hidden" id="page-Rutinas">
+        <div class="page-head">
+          <div><h1>Rutinas</h1><p>Marca tus actividades recurrentes y da seguimiento al cumplimiento de tu equipo.</p></div>
+          <div class="head-actions">
+            <div class="week-nav">
+              <button class="icon-btn" data-action="rt:prev" aria-label="Semana anterior"><i data-i="chev-l"></i></button>
+              <span id="rtWeekLabel"></span>
+              <button class="icon-btn" data-action="rt:next" aria-label="Semana siguiente"><i data-i="chev-r"></i></button>
+              <button class="btn btn-secondary btn-sm" data-action="rt:today">Hoy</button>
+            </div>
+            <button class="btn btn-primary" data-action="routine:new"><i data-i="plus"></i><span>Nueva actividad</span></button>
+          </div>
+        </div>
+        <div id="routineMine"></div>
+        <div id="routineTeam"></div>
+      </section>
+
+      <!-- ============ EQUIPO ============ -->
+      <section class="page hidden" id="page-Equipo">
+        <div class="page-head">
+          <div><h1>Equipo</h1><p>Define quién reporta a quién y asígnale trabajo a tu gente.</p></div>
+          <button class="btn btn-primary" data-action="user:new"><i data-i="plus"></i><span>Nuevo integrante</span></button>
+        </div>
+        <div class="panel"><ul class="org" id="orgTree"></ul></div>
+        <section class="panel" style="margin-top:16px">
+          <div class="panel-head"><div><h2>Departamentos</h2><p>Agrupan a las personas, los proyectos y las actividades.</p></div>
+            <button class="btn btn-secondary btn-sm" data-action="dept:new"><i data-i="plus"></i><span>Nuevo departamento</span></button></div>
+          <div class="focus-list" id="deptList"></div>
+        </section>
+      </section>
+
+      <!-- ============ CATÁLOGO ============ -->
+      <section class="page hidden" id="page-Catálogo">
+        <div class="page-head">
+          <div><h1>Catálogo</h1><p>Proyectos, KPI y reportes que maneja cada persona, con acceso directo en un clic.</p></div>
+          <button class="btn btn-primary" data-action="cat:new"><i data-i="plus"></i><span>Nuevo recurso</span></button>
+        </div>
+        <div class="toolbar">
+          <label class="field-search"><i data-i="search"></i><input id="catSearch" type="search" placeholder="Buscar por título, etiqueta, persona o sitio" autocomplete="off"></label>
+          <select id="catOwner" aria-label="Propietario"></select>
+          <select id="catSort" aria-label="Ordenar por">
+            <option value="recent">Ordenar: más recientes</option>
+            <option value="name">Ordenar: título</option>
+            <option value="type">Ordenar: tipo</option>
+          </select>
+        </div>
+        <div class="chips" id="catChips"></div>
+        <div class="catalog-grid" id="catalogGrid"></div>
+      </section>
+
+      <!-- ============ ARCHIVOS ============ -->
+      <section class="page hidden" id="page-Archivos">
+        <div class="page-head">
+          <div><h1>Archivos</h1><p>Prepara los documentos de tu espacio de trabajo local.</p></div>
+          <label class="btn btn-primary"><i data-i="upload"></i><span>Seleccionar archivos</span><input type="file" id="fileInput" multiple hidden></label>
+        </div>
+        <div class="dropzone" id="fileDrop">
+          <i data-i="upload"></i>
+          <strong>Suelta tus archivos aquí</strong>
+          <span>También puedes usar el botón. Los archivos no se suben a ningún servidor en esta versión.</span>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>Archivos seleccionados</h2><p id="fileCount">Vista temporal de esta sesión</p></div>
+            <label class="field-search compact"><i data-i="search"></i><input id="fileSearch" type="search" placeholder="Buscar archivo"></label>
+          </div>
+          <div id="fileList" class="file-list"></div>
+        </div>
+      </section>
+
+      <!-- ============ REPORTES ============ -->
+      <section class="page hidden" id="page-Reportes">
+        <div class="page-head">
+          <div><h1>Reportes</h1><p>Indicadores calculados a partir de tus tareas actuales.</p></div>
+          <div class="head-actions">
+            <button class="btn btn-secondary" data-action="data:export-json"><i data-i="download"></i><span>Respaldo JSON</span></button>
+            <button class="btn btn-primary" data-action="report:csv"><i data-i="download"></i><span>Exportar CSV</span></button>
+          </div>
+        </div>
+        <div class="stats" id="reportStats"></div>
+        <div class="report-grid">
+          <section class="panel"><div class="panel-head"><div><h2>Estado de las tareas</h2><p>Porcentaje del total</p></div></div>
+            <div class="donut-block"><div id="reportDonut"></div><div class="legend" id="reportLegend"></div></div></section>
+          <section class="panel"><div class="panel-head"><div><h2>Por prioridad</h2><p>Tareas activas</p></div></div><div class="bars" id="reportPriority"></div></section>
+          <section class="panel"><div class="panel-head"><div><h2>Avance por proyecto</h2><p>Tareas finalizadas sobre el total</p></div></div><div class="bars" id="reportProjects"></div></section>
+          <section class="panel"><div class="panel-head"><div><h2>Avance por departamento</h2><p>Tareas finalizadas sobre el total</p></div></div><div class="bars" id="reportDepts"></div></section>
+          <section class="panel"><div class="panel-head"><div><h2>Carga por responsable</h2><p>Tareas activas asignadas</p></div></div><div class="bars" id="reportWorkload"></div></section>
+          <section class="panel wide"><div class="panel-head"><div><h2>Tareas vencidas</h2><p>Requieren atención inmediata</p></div></div><div class="focus-list" id="reportOverdue"></div></section>
+        </div>
+      </section>
+
+      <!-- ============ CHAT ============ -->
+      <section class="page hidden" id="page-Chat">
+        <div class="page-head">
+          <div><h1>Chat de logística</h1><p>Mensajes locales de demostración.</p></div>
+          <span class="online-pill"><span class="live-dot"></span> En línea</span>
+        </div>
+        <div class="panel chat">
+          <div class="chat-header">
+            <span class="avatar" style="--av:#3b82f6">LG</span>
+            <div><strong>Logística</strong><small>Canal del equipo</small></div>
+          </div>
+          <div class="chat-messages" id="chatMessages"></div>
+          <form class="chat-compose" id="chatForm">
+            <input id="chatInput" placeholder="Escribe un mensaje" maxlength="1000" autocomplete="off" required>
+            <button class="btn btn-primary" aria-label="Enviar mensaje"><i data-i="send"></i><span>Enviar</span></button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ CONFIGURACIÓN ============ -->
+      <section class="page hidden" id="page-Configuración">
+        <div class="page-head"><div><h1>Configuración</h1><p>Personaliza tu perfil y la apariencia de MYA.</p></div></div>
+        <div class="settings">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Perfil</h2><p>Información que aparece en el espacio de trabajo.</p></div></div>
+            <label class="form-field">Nombre<input id="userNameSetting" maxlength="70"></label>
+            <label class="form-field">Cargo<input id="userRoleSetting" maxlength="100"></label>
+            <label class="form-field">ID de usuario<input id="userLoginSetting" readonly></label>
+            <button class="btn btn-primary" data-action="profile:save"><i data-i="check"></i><span>Guardar perfil</span></button>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Apariencia</h2><p>Los cambios se aplican al instante.</p></div></div>
+            <div class="setting-row">
+              <div><strong>Tema</strong><p>Elige claro, oscuro o el de tu sistema.</p></div>
+              <div class="seg" id="themeSeg">
+                <button data-action="theme:set" data-theme-value="dark"><i data-i="moon"></i><span>Oscuro</span></button>
+                <button data-action="theme:set" data-theme-value="light"><i data-i="sun"></i><span>Claro</span></button>
+                <button data-action="theme:set" data-theme-value="system"><span>Sistema</span></button>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div><strong>Color de acento</strong><p>Botones, enlaces y selecciones.</p></div>
+              <div class="swatches" id="accentSwatches"></div>
+            </div>
+          </section>
+
+          <section class="panel" id="sheetsPanel">
+            <div class="panel-head"><div><h2>Base de datos en Google Sheets</h2><p>Comparte la información del equipo entre todos los dispositivos.</p></div><span class="status-badge" id="sheetsBadge" data-state="off">Solo local</span></div>
+            <label class="form-field">URL de la aplicación web (Apps Script)<input id="shUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false"></label>
+            <label class="form-field">Clave de acceso<input id="shToken" type="password" autocomplete="off" placeholder="La clave definida en el código del servidor"></label>
+            <div class="btn-row">
+              <button class="btn btn-primary" data-action="sheets:connect"><i data-i="link"></i><span>Probar y conectar</span></button>
+              <button class="btn btn-secondary" data-action="sync:now"><i data-i="repeat"></i><span>Sincronizar ahora</span></button>
+              <button class="btn btn-secondary" data-action="sheets:upload"><i data-i="upload"></i><span>Subir datos de este navegador</span></button>
+              <button class="btn btn-danger" data-action="sheets:disconnect"><i data-i="x"></i><span>Desconectar</span></button>
+            </div>
+            <p class="hint" id="shInfo" style="margin-top:12px"></p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Rutinas</h2><p>Cómo se calcula el cumplimiento del equipo.</p></div></div>
+            <div class="setting-row">
+              <div><strong>Días laborables</strong><p>Las rutinas diarias solo se esperan estos días.</p></div>
+              <select id="routineDaysSel" data-change="settings:routineDays"><option value="5">Lunes a viernes</option><option value="6">Lunes a sábado</option><option value="7">Todos los días</option></select>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Datos locales</h2><p>Todo se guarda en este navegador. Haz un respaldo antes de limpiar el historial.</p></div></div>
+            <div class="btn-row">
+              <button class="btn btn-secondary" data-action="data:export-json"><i data-i="download"></i><span>Exportar respaldo</span></button>
+              <label class="btn btn-secondary"><i data-i="upload"></i><span>Importar respaldo</span><input type="file" id="importFile" accept="application/json,.json" hidden></label>
+              <button class="btn btn-danger" data-action="data:reset"><i data-i="trash"></i><span>Restablecer demostración</span></button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Atajos de teclado</h2><p>Trabaja sin soltar el teclado.</p></div></div>
+            <dl class="shortcuts">
+              <div><dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar y ejecutar comandos</dd></div>
+              <div><dt><kbd>N</kbd></dt><dd>Crear una tarea</dd></div>
+              <div><dt><kbd>/</kbd></dt><dd>Abrir la búsqueda</dd></div>
+              <div><dt><kbd>Esc</kbd></dt><dd>Cerrar ventanas y menús</dd></div>
+            </dl>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============ DIÁLOGO: TAREA ============ -->
+  <dialog class="modal" id="taskDialog" aria-labelledby="taskDialogTitle">
+    <form id="taskForm" method="dialog" novalidate>
+      <div class="modal-head">
+        <h2 id="taskDialogTitle">Nueva tarea</h2>
+        <button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-field">Nombre<input id="tName" maxlength="120" required placeholder="Ej. Revisar inventario"></label>
+        <label class="form-field">Descripción<textarea id="tDesc" rows="2" maxlength="500" placeholder="Describe brevemente la actividad"></textarea></label>
+        <div class="form-row">
+          <label class="form-field">Proyecto<select id="tProject" required></select><small class="hint" id="tDeptHint"></small></label>
+          <label class="form-field" id="assigneeField">Responsable<select id="tAssignee"></select></label>
+          <div class="form-field" id="multiAssignField" hidden><span>Asignar a</span><div class="checks" id="multiAssign"></div></div>
+        </div>
+        <div class="form-row" id="rowStatus">
+          <label class="form-field">Estado<select id="tStatus"></select></label>
+          <label class="form-field">Prioridad<select id="tPriority"></select></label>
+        </div>
+        <div class="form-row" id="rowDates">
+          <label class="form-field">Inicio<input id="tStart" type="date"></label>
+          <label class="form-field">Entrega<input id="tDue" type="date"></label>
+        </div>
+        <label class="form-field">Etiquetas<input id="tTags" maxlength="80" placeholder="Separadas por comas: urgente, compras"></label>
+        <div class="form-field" id="subtaskField">
+          <span>Subtareas</span>
+          <div class="subtask-list" id="subtaskList"></div>
+          <button type="button" class="btn btn-ghost btn-sm" data-action="subtask:add"><i data-i="plus"></i><span>Agregar subtarea</span></button>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-danger btn-sm push-left" id="taskDeleteBtn" data-action="task:delete-from-dialog" hidden><i data-i="trash"></i><span>Eliminar</span></button>
+        <button type="button" class="btn btn-secondary" data-action="dialog:close">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="taskSaveBtn">Crear tarea</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: PROYECTO ============ -->
+  <dialog class="modal modal-sm" id="projectDialog" aria-labelledby="projectDialogTitle">
+    <form id="projectForm" method="dialog" novalidate>
+      <div class="modal-head">
+        <h2 id="projectDialogTitle">Nuevo proyecto</h2>
+        <button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-field">Nombre<input id="pName" maxlength="80" required placeholder="Ej. Apertura de sucursal"></label>
+        <label class="form-field">Descripción<textarea id="pDesc" rows="3" maxlength="300" placeholder="¿De qué trata este proyecto?"></textarea></label>
+        <label class="form-field">Departamento<input id="pDept" list="deptOptions" maxlength="60" autocomplete="off" placeholder="Escribe o elige un departamento"></label>
+        <div class="form-field"><span>Tipo de proyecto</span>
+          <div class="seg seg-full" id="pRoutine">
+            <button type="button" data-action="proj:routine" data-routine="none" class="active">Proyecto</button>
+            <button type="button" data-action="proj:routine" data-routine="daily">Rutina diaria</button>
+            <button type="button" data-action="proj:routine" data-routine="weekly">Rutina semanal</button>
+          </div>
+          <small class="hint" id="pRoutineHint"></small>
+        </div>
+        <div class="form-field"><span>Color</span><div class="swatches" id="pColors"></div></div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-action="dialog:close">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="projectSaveBtn">Crear proyecto</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: DÍA DEL CALENDARIO ============ -->
+  <dialog class="modal modal-sm" id="dayDialog" aria-labelledby="dayTitle">
+    <div class="modal-head">
+      <h2 id="dayTitle"></h2>
+      <button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button>
+    </div>
+    <div class="modal-body"><div class="focus-list" id="dayList"></div></div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-action="dialog:close">Cerrar</button>
+      <button type="button" class="btn btn-primary" id="dayNew" data-action="task:new"><i data-i="plus"></i><span>Nueva tarea para este día</span></button>
+    </div>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: INTEGRANTE ============ -->
+  <dialog class="modal modal-sm" id="userDialog" aria-labelledby="userDialogTitle">
+    <form id="userForm" method="dialog" novalidate>
+      <div class="modal-head">
+        <h2 id="userDialogTitle">Nuevo integrante</h2>
+        <button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-field">Nombre<input id="uName" maxlength="70" required placeholder="Ej. Juan Díaz"></label>
+        <label class="form-field">ID de usuario<input id="uLogin" maxlength="24" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ej. juan">
+          <small class="hint">Con este ID iniciará sesión. De 3 a 24 caracteres: letras, números, punto, guion o guion bajo.</small></label>
+        <label class="form-field">Departamento<input id="uDept" list="deptOptions" maxlength="60" autocomplete="off" placeholder="Escribe o elige un departamento"></label>
+        <label class="form-field">Cargo o rol<input id="uRole" maxlength="100" placeholder="Ej. Encargado de almacén"></label>
+        <div class="form-field" id="uSupField"><span>Supervisión</span>
+          <div class="seg seg-full" id="uSupToggle">
+            <button type="button" data-action="usup:set" data-mode="with" class="active">Con supervisor</button>
+            <button type="button" data-action="usup:set" data-mode="none">Sin supervisor</button>
+          </div>
+          <select id="uSupervisor" aria-label="Supervisor"></select>
+          <small class="hint" id="uSupHint"></small>
+        </div>
+        <label class="check-opt" id="uAdminField" hidden><input type="checkbox" id="uAdmin"><span><strong>Administrador</strong><small class="hint">Puede ver y gestionar todos los departamentos, personas y recursos.</small></span></label>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-action="dialog:close">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="userSaveBtn">Crear integrante</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: DETALLE DE PERSONA ============ -->
+  <dialog class="modal modal-wide" id="memberDialog" aria-labelledby="memberTitle">
+    <div class="modal-head"><h2 id="memberTitle"></h2><button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button></div>
+    <div class="modal-body" id="memberBody"></div>
+    <div class="modal-foot"><button type="button" class="btn btn-secondary" data-action="dialog:close">Cerrar</button></div>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: RECURSO DEL CATÁLOGO ============ -->
+  <dialog class="modal" id="catDialog" aria-labelledby="catDialogTitle">
+    <form id="catForm" method="dialog" novalidate>
+      <div class="modal-head">
+        <h2 id="catDialogTitle">Nuevo recurso</h2>
+        <button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label class="form-field">Tipo<select id="cType"></select></label>
+          <label class="form-field">Título<input id="cTitle" maxlength="100" required placeholder="Ej. KPI de despachos a tiempo"></label>
+        </div>
+        <label class="form-field">Enlace<input id="cUrl" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://"></label>
+        <label class="form-field">Descripción<textarea id="cDesc" rows="3" maxlength="300" placeholder="¿Qué contiene y para qué sirve?"></textarea></label>
+        <label class="form-field">Etiquetas<input id="cTags" maxlength="80" placeholder="Separadas por comas: semanal, gerencia"></label>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" data-action="dialog:close">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="catSaveBtn">Publicar recurso</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============ PALETA DE COMANDOS ============ -->
+  <dialog class="modal palette" id="paletteDialog" aria-label="Buscar o ejecutar un comando">
+    <div class="palette-input"><i data-i="search"></i><input id="paletteInput" placeholder="Escribe una tarea, un proyecto o un comando" autocomplete="off"><kbd>Esc</kbd></div>
+    <div class="palette-list" id="paletteList" role="listbox"></div>
+  </dialog>
+
+  <!-- ============ DIÁLOGO: DEPARTAMENTO ============ -->
+  <dialog class="modal modal-sm" id="deptDialog" aria-labelledby="deptDialogTitle">
+    <form id="deptForm" method="dialog" novalidate>
+      <div class="modal-head"><h2 id="deptDialogTitle">Nuevo departamento</h2><button type="button" class="icon-btn" data-action="dialog:close" aria-label="Cerrar"><i data-i="x"></i></button></div>
+      <div class="modal-body"><label class="form-field">Nombre<input id="dName" maxlength="60" required placeholder="Ej. Logística"></label></div>
+      <div class="modal-foot"><button type="button" class="btn btn-secondary" data-action="dialog:close">Cancelar</button><button type="submit" class="btn btn-primary">Guardar</button></div>
+    </form>
+  </dialog>
+  <datalist id="deptOptions"></datalist>
+
+  <!-- ============ INICIO DE SESIÓN ============ -->
+  <div class="login" id="loginScreen" hidden>
+    <aside class="login-art">
+      <div class="brand"><span class="brand-mark">M</span><span class="brand-copy"><strong>MYA</strong><small>Manage Your Activities</small></span></div>
+      <div class="login-pitch">
+        <h2>Rutinas, equipos y reportes en un solo lugar.</h2>
+        <p>Cada persona marca su avance. Cada supervisor ve el cumplimiento de su equipo, semana a semana.</p>
+      </div>
+      <div class="login-preview" aria-hidden="true">
+        <div class="lp-head"><strong>Cumplimiento semanal</strong><span>Equipo de logística</span></div>
+        <div class="lp-row heat-good"><span class="avatar sm" style="--av:#10b981">JD</span><em>Juan Díaz</em><div class="track"><i style="width:92%"></i></div><b>92%</b></div>
+        <div class="lp-row heat-mid"><span class="avatar sm" style="--av:#3b82f6">PG</span><em>Pedro Gómez</em><div class="track"><i style="width:71%"></i></div><b>71%</b></div>
+        <div class="lp-row heat-low"><span class="avatar sm" style="--av:#f43f5e">CS</span><em>Carla Santos</em><div class="track"><i style="width:48%"></i></div><b>48%</b></div>
+      </div>
+    </aside>
+    <form class="login-card" id="loginForm" novalidate>
+      <span class="brand-mark">M</span>
+      <div><h1>Inicia sesión</h1><p>Ingresa tu ID de usuario para continuar.</p></div>
+      <label class="form-field">ID de usuario<input id="loginId" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="Ej. juan"></label>
+      <p class="form-error" id="loginError" role="alert" hidden></p>
+      <button class="btn btn-primary btn-block" type="submit"><span>Entrar</span></button>
+      <p class="login-help">¿Aún no tienes un ID? Pídele a tu supervisor que te registre desde la sección Equipo.</p>
+      <div class="login-demo" id="demoIds" hidden></div>
+      <details class="login-conn" id="loginConn">
+        <summary>Conexión con Google Sheets</summary>
+        <label class="form-field">URL de la aplicación web<input id="lcUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false"></label>
+        <label class="form-field">Clave de acceso<input id="lcToken" type="password" autocomplete="off"></label>
+        <button type="button" class="btn btn-secondary btn-block" data-action="sheets:connect-login"><span>Probar y conectar</span></button>
+        <p class="hint" id="lcInfo"></p>
+      </details>
+    </form>
+    <div class="login-card" id="initCard" hidden>
+      <span class="brand-mark">M</span>
+      <div><h1>Configura tu espacio</h1><p>La hoja de Google está vacía. Crea la cuenta de administrador para comenzar.</p></div>
+      <label class="form-field">Nombre completo<input id="inName" maxlength="70" autocomplete="off"></label>
+      <label class="form-field">ID de usuario<input id="inLogin" maxlength="24" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ej. manuel"></label>
+      <label class="form-field">Departamento<input id="inDept" maxlength="60" autocomplete="off" placeholder="Ej. Logística"></label>
+      <label class="form-field">Cargo o rol<input id="inRole" maxlength="100" autocomplete="off" placeholder="Ej. Gerente"></label>
+      <p class="form-error" id="inError" role="alert" hidden></p>
+      <button type="button" class="btn btn-primary btn-block" data-action="init:admin"><span>Crear administrador y empezar</span></button>
+      <button type="button" class="btn btn-ghost btn-block" data-action="init:demo"><span>Cargar datos de demostración</span></button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span id="toastMsg"></span>
+    <button class="toast-undo" id="toastUndo" hidden><i data-i="undo"></i><span>Deshacer</span></button>
+  </div>
+</body>
+</html>
